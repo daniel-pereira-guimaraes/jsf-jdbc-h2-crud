@@ -1,0 +1,53 @@
+@charset "ISO-8859-1";
+
+body {
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	font-size: 16px;
+}
+
+.content {
+	width: 600px;
+	margin: 20px auto;
+	border: 1px solid DarkBlue;
+}
+
+.content h1 {
+	margin: 0;
+	padding: 10px;
+	text-align: center;
+	background-color: DarkBlue;
+	color: white;
+	font-size: 22px;
+}
+
+.tool-bar {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 15px 0;
+	gap: 10px;
+}
+
+.button {
+	padding: 5px;
+	font-weight: bold;
+	border-radius: 5px;
+	width: 120px;
+	border: 1px solid gray;
+	background-color: gainsboro;
+	cursor: pointer;
+}
+
+.button-add {
+	border: 1px solid DarkBlue;
+	background-color: LightBlue;
+}
+
+.button-save {
+	border: 1px solid DarkGreen;
+	background-color: LightGreen;
+}
+
+.error {
+	color: red;
+}

@@ -113,7 +113,6 @@ public class PersonDAO {
 		} finally {
 			connection.close();
 		}
-		Person p = selectById(person.getId());
 	}
 
 	public void delete(Long id) throws ClassNotFoundException, SQLException {

@@ -1,0 +1,41 @@
+@charset "ISO-8859-1";
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: DarkBlue;
+	color: white;
+	text-align: center;
+}
+
+.table-odd-row {
+	border-bottom: 1px solid DarkBlue;
+	background-color: white;
+	color: black;
+	padding: 5px;
+}
+
+.table-even-row {
+	border-bottom: 1px solid DarkBlue;
+	background-color: gainsboro;
+	color: black;
+	padding: 5px;
+}
+
+.table-button {
+	border-radius: 4px;
+	margin: 5px;
+	width: 60px;
+	cursor: pointer;
+}
+
+.table-button-edit {
+	border: 1px solid DarkBlue;
+	background-color: LightBlue;		
+}
+
+.table-button-delete {
+	border: 1px solid OrangeRed;
+	background-color: LightYellow;		
+}
+

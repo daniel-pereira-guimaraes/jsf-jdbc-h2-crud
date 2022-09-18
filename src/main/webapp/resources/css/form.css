@@ -1,0 +1,25 @@
+@charset "ISO-8859-1";
+
+.form {
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+}
+
+.form-horz-box {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+}
+
+.form-field-box {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	margin: 15px 0;
+	width: 100%;
+}
+
+
