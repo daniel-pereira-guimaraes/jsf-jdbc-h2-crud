@@ -58,6 +58,7 @@
 						action="#{personController.edit(p.id)}" />
 					<h:commandButton value="Delete"
 						styleClass="table-button table-button-delete"
+						onclick="return confirm('Delete person?')"
 						action="#{personController.delete(p.id)}" />
 				</h:column>
 

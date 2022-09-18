@@ -49,6 +49,7 @@
 				<h:commandButton value="Save" styleClass="button button-save"
 					action="#{personController.save(person)}" />
 				<h:button value="Cancel" styleClass="button"
+					onclick="if (!confirm('Discard changes?')) return false"
 					immediate="true" outcome="person_list" />
 			</div>
 
