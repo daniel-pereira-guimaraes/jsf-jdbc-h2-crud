@@ -44,7 +44,7 @@ public class PersonDAO {
 		return DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
 	}
 
-	private boolean isPrepared() throws SQLException, ClassNotFoundException {
+	private boolean isPrepared() throws Exception {
 		Connection connection = null;
 		ResultSet rs = null;
 		try {
@@ -52,24 +52,19 @@ public class PersonDAO {
 			rs = connection.getMetaData().getTables(null, null, "PERSON", null);
 			return rs.next();
 		} finally {
-			if (rs != null)
-				rs.close();
-			if (connection != null)
-				connection.close();
+			Utils.close(rs, connection);
 		}
 	}
 
-	private void prepareDatabase() throws SQLException, ClassNotFoundException {
-		Connection connection = getConnection();
+	private void prepareDatabase() throws Exception {
+		Connection connection = null;
+		Statement stm = null;
 		try {
-			Statement stm = connection.createStatement();
-			try {
-				stm.execute(SQL_CREATE_TABLE_PERSON);
-			} finally {
-				stm.close();
-			}
+			connection = getConnection();
+			stm = connection.createStatement();
+			stm.execute(SQL_CREATE_TABLE_PERSON);
 		} finally {
-			connection.close();
+			Utils.close(stm, connection);
 		}
 	}
 	
@@ -90,48 +85,40 @@ public class PersonDAO {
 				connection.rollback();
 			throw e;
 		} finally {
-			if (pstm != null)
-				pstm.close();
-			if (connection != null)
-				connection.close();
+			Utils.close(pstm, connection);
 		}
 	}
 
 	public void update(Person person) throws Exception {
 		// Explicit transaction not required for only one operation.
-		Connection connection = getConnection();
+		Connection connection = null;
+		PreparedStatement pstm = null;
 		try {
-			PreparedStatement pstm = connection.prepareStatement(SQL_UPDATE);
-			try {
-				pstm.setString(1, person.getFirstName());
-				pstm.setString(2, person.getLastName());
-				pstm.setLong(3, person.getId());
-				pstm.execute();
-			} finally {
-				pstm.close();
-			}
+			connection = getConnection();
+			pstm = connection.prepareStatement(SQL_UPDATE);
+			pstm.setString(1, person.getFirstName());
+			pstm.setString(2, person.getLastName());
+			pstm.setLong(3, person.getId());
+			pstm.execute();
 		} finally {
-			connection.close();
+			Utils.close(pstm, connection);
 		}
 	}
 
-	public void delete(Long id) throws ClassNotFoundException, SQLException {
-		Connection connection = getConnection();
+	public void delete(Long id) throws Exception {
+		Connection connection = null;
+		PreparedStatement pstm = null;
 		try {
-			PreparedStatement pstm = connection.prepareStatement(SQL_DELETE);
-			try {
-				pstm.setLong(1, id);
-				pstm.execute();
-			} finally {
-				pstm.close();
-			}
+			connection = getConnection();
+			pstm = connection.prepareStatement(SQL_DELETE);
+			pstm.setLong(1, id);
+			pstm.execute();
 		} finally {
-			connection.close();
+			Utils.close(pstm, connection);
 		}
 	}
 
 	public Person selectById(Long id) throws Exception {
-		Person person = null;
 		Connection connection = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
@@ -141,18 +128,15 @@ public class PersonDAO {
 			pstm.setLong(1, id);
 			rs = pstm.executeQuery();
 			if (rs.next())
-				person = new Person(id, rs.getString(1), rs.getString(2));
+				return new Person(id, rs.getString(1), rs.getString(2));
 			else
 				throw new Exception("Person not found: " + id);
 		} finally {
-			if (rs != null)	rs.close();
-			if (pstm != null) pstm.close();
-			if (connection != null)	connection.close();
+			Utils.close(rs, pstm, connection);
 		}
-		return person;
 	}
 
-	public List<Person> selectAll() throws ClassNotFoundException, SQLException {
+	public List<Person> selectAll() throws Exception {
 		List<Person> list = new ArrayList<Person>();
 		Connection connection = null;
 		Statement stm = null;
@@ -164,9 +148,7 @@ public class PersonDAO {
 			while (rs.next())
 				list.add(new Person(rs.getLong(1), rs.getString(2), rs.getString(3)));
 		} finally {
-			if (rs != null) rs.close();
-			if (stm != null) stm.close();
-			if (connection != null) connection.close();
+			Utils.close(rs, stm, connection);
 		}
 		return list;
 	}
