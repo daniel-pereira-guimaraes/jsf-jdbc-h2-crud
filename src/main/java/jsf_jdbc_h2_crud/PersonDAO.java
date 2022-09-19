@@ -33,9 +33,6 @@ public class PersonDAO {
 	private PersonDAO() throws ClassNotFoundException, SQLException, Exception {
 		if (!isPrepared()) {
 			prepareDatabase();
-			insert(new Person("Daniel", "Guimarães"));
-			insert(new Person("João", "Silva"));
-			insert(new Person("José", "Souza"));
 		}
 	}
 	
