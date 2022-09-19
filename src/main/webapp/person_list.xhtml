@@ -15,6 +15,13 @@
 	<title>Persons</title>
 	<h:outputStylesheet library="css" name="base.css" />
 	<h:outputStylesheet library="css" name="table.css" />
+	<script>
+		window.onload = () => { 
+			searchInput = document.getElementById('search-form:search-input');
+			searchInput.focus();
+			searchInput.select();
+		}
+	</script>
 </h:head>
 
 <body>
@@ -23,38 +30,46 @@
 
 		<h:messages />
 
+		<div class="tool-bar">
+			<h:button value="Add person" styleClass="button button-add"
+				outcome="person_edit" />
+			<h:button value="Reload data" styleClass="button"
+				action="#{personController.loadList}" />
+		</div>
+
+		<h:form id="search-form" styleClass="tool-bar">
+			<div class="form-horz-box">
+				<h:inputText id="search-input" styleClass="input-search"
+					value="#{personController.searchText}" />
+				<h:commandButton value="Search" class="button button-search" />
+			</div>
+		</h:form>
+
 		<h:form>
 
-			<div class="tool-bar">
-				<h:button value="ADD PERSON" styleClass="button button-add"
-					outcome="person_edit" />
-				<h:button value="RELOAD DATA" styleClass="button"
-					action="#{personController.loadList}" />
-			</div>
-
 			<h:dataTable value="#{personController.list}" var="p"
-				styleClass="table"
-				headerClass="table-header"
+				styleClass="table" headerClass="table-header"
 				rowClasses="table-even-row, table-odd-row">
 
 				<h:column>
 					<f:facet name="header">Id</f:facet>
-				#{p.id}
-			</h:column>
+					#{p.id}
+				</h:column>
 
 				<h:column>
 					<f:facet name="header">First name</f:facet>
-				#{p.firstName}
-			</h:column>
+					#{p.firstName}
+				</h:column>
 
 				<h:column>
 					<f:facet name="header">Last name</f:facet>
-				#{p.lastName}
-			</h:column>
+					#{p.lastName}
+				</h:column>
 
 				<h:column>
 					<f:facet name="header">Actions</f:facet>
-					<h:commandButton value="Edit" styleClass="table-button table-button-edit"
+					<h:commandButton value="Edit"
+						styleClass="table-button table-button-edit"
 						action="#{personController.edit(p.id)}" />
 					<h:commandButton value="Delete"
 						styleClass="table-button table-button-delete"

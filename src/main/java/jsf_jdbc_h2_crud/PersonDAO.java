@@ -19,8 +19,8 @@ public class PersonDAO {
 	private static final String SQL_INSERT = "INSERT INTO person(first_name, last_name) VALUES(?,?)";
 	private static final String SQL_UPDATE = "UPDATE person SET first_name=?, last_name=? WHERE id=?";
 	private static final String SQL_DELETE = "DELETE person WHERE id=?";
+	private static final String SQL_SELECT = "SELECT id, first_name, last_name FROM person %s ORDER BY first_name, last_name";
 	private static final String SQL_SELECT_BY_ID = "SELECT first_name, last_name FROM person WHERE id=?";
-	private static final String SQL_SELECT_ALL = "SELECT id, first_name, last_name FROM person ORDER BY first_name, last_name";
 
 	private static PersonDAO instance;
 	
@@ -118,6 +118,36 @@ public class PersonDAO {
 		}
 	}
 
+	public List<Person> selectByText(String text) throws Exception {
+		String sql = SQL_SELECT;
+		boolean hasFilter = text != null && !text.isEmpty();
+		if (hasFilter) {
+			text = "%" + text + "%";
+			sql = String.format(sql, "WHERE first_name LIKE ? OR last_name LIKE ?");
+		} else {
+			sql = String.format(sql, "");			
+		}
+		System.out.println(sql);
+		List<Person> list = new ArrayList<Person>();
+		Connection connection = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		try {
+			connection = getConnection();
+			pstm = connection.prepareStatement(sql);
+			if (hasFilter) {
+				pstm.setString(1, text);
+				pstm.setString(2, text);
+			}
+			rs = pstm.executeQuery();
+			while (rs.next())
+				list.add(new Person(rs.getLong(1), rs.getString(2), rs.getString(3)));
+		} finally {
+			Utils.close(rs, pstm, connection);
+		}
+		return list;
+	}
+	
 	public Person selectById(Long id) throws Exception {
 		Connection connection = null;
 		PreparedStatement pstm = null;
@@ -136,21 +166,5 @@ public class PersonDAO {
 		}
 	}
 
-	public List<Person> selectAll() throws Exception {
-		List<Person> list = new ArrayList<Person>();
-		Connection connection = null;
-		Statement stm = null;
-		ResultSet rs = null;
-		try {
-			connection = getConnection();
-			stm = connection.createStatement();
-			rs = stm.executeQuery(SQL_SELECT_ALL);
-			while (rs.next())
-				list.add(new Person(rs.getLong(1), rs.getString(2), rs.getString(3)));
-		} finally {
-			Utils.close(rs, stm, connection);
-		}
-		return list;
-	}
 
 }

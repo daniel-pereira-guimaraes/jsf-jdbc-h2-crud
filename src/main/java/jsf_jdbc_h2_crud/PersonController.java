@@ -17,17 +17,17 @@ import javax.faces.event.ComponentSystemEvent;
 public class PersonController {
 
 	private List<Person> list = new ArrayList<Person>();
+	private String searchText;
 	
 	private void addErrorMessage(Exception e) {
 		FacesMessage message = new FacesMessage(e.getMessage());
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	public void loadList(ComponentSystemEvent cse) 
-			throws ClassNotFoundException, SQLException, Exception {
+	public void loadList(ComponentSystemEvent cse) {
 		list.clear();
 		try {
-			list = PersonDAO.getInstante().selectAll();
+			list = PersonDAO.getInstante().selectByText(searchText);
 		} catch(Exception e) {
 			addErrorMessage(e);
 		}
@@ -37,8 +37,17 @@ public class PersonController {
 		return list;
 	}
 	
-	public int getListCount() {
-		return list.size();
+	public String getSearchText() {
+		return searchText;
+	}
+
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
+	
+	public String search() {
+		loadList(null);
+		return null;
 	}
 
 	public String edit(Long id) {
@@ -76,6 +85,6 @@ public class PersonController {
 		}
 		return null;
 	}
-	
+
 
 }
