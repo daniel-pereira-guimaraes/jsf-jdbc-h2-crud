@@ -24,7 +24,7 @@ public class PersonDAO {
 
 	private static PersonDAO instance;
 	
-	public static PersonDAO getInstante() throws ClassNotFoundException, SQLException, Exception {
+	public static PersonDAO getInstance() throws ClassNotFoundException, SQLException, Exception {
 		if (instance == null)
 			instance = new PersonDAO();
 		return instance;

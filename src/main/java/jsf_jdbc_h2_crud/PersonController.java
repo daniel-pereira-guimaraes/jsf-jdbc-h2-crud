@@ -27,7 +27,7 @@ public class PersonController {
 	public void loadList(ComponentSystemEvent cse) {
 		list.clear();
 		try {
-			list = PersonDAO.getInstante().selectByText(searchText);
+			list = PersonDAO.getInstance().selectByText(searchText);
 		} catch(Exception e) {
 			addErrorMessage(e);
 		}
@@ -52,7 +52,7 @@ public class PersonController {
 
 	public String edit(Long id) {
 		try {
-			Person person = PersonDAO.getInstante().selectById(id);
+			Person person = PersonDAO.getInstance().selectById(id);
 			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 			Map<String, Object> requestMap = externalContext.getRequestMap();
 			requestMap.put("person", person);
@@ -65,7 +65,7 @@ public class PersonController {
 	
 	public String save(Person person) throws Exception {
 		try {
-			PersonDAO dao = PersonDAO.getInstante();
+			PersonDAO dao = PersonDAO.getInstance();
 			if (person.getId() == null)
 				dao.insert(person);
 			else
@@ -79,7 +79,7 @@ public class PersonController {
 	
 	public String delete(Long id) {
 		try {
-			PersonDAO.getInstante().delete(id);
+			PersonDAO.getInstance().delete(id);
 		} catch(Exception e) {
 			addErrorMessage(e);
 		}
